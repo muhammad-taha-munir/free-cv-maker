@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Maker - Project Documentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            /* Color Palette */
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #3b82f6;
+            --secondary: #0f172a;
+            --secondary-light: #1e293b;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+
+            /* Neutrals */
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+
+            /* Spacing */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+
+            /* Typography */
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+            /* Transitions */
+            --transition-fast: 150ms ease;
+            --transition-base: 300ms ease;
+            --transition-slow: 500ms ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            color: var(--gray-900);
+            background: linear-gradient(135deg, var(--gray-50) 0%, #ffffff 100%);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Header Styles */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow var(--transition-base);
+        }
+
+        .header.scrolled {
+            box-shadow: var(--shadow-md);
+        }
+
+        .header-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: var(--spacing-md) var(--spacing-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--secondary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.125rem;
+        }
+
+        .nav {
+            display: flex;
+            gap: var(--spacing-md);
+        }
+
+        .nav-link {
+            color: var(--gray-600);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 6px;
+            transition: all var(--transition-fast);
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+            background: var(--gray-100);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: var(--spacing-xl) var(--spacing-lg);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: var(--spacing-xl) 0;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--spacing-sm);
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray-600);
+            font-weight: 400;
+        }
+
+        /* Mandate Box */
+        .mandate {
+            background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+            border-left: 4px solid var(--primary);
+            padding: var(--spacing-lg);
+            border-radius: 12px;
+            margin-bottom: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
+        }
+
+        .mandate-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: var(--spacing-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .mandate-text {
+            color: var(--gray-700);
+            line-height: 1.7;
+        }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 3px solid var(--gray-200);
+        }
+
+        .section-number {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--secondary);
+            letter-spacing: -0.01em;
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-200);
+            transition: all var(--transition-base);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .card-text {
+            color: var(--gray-600);
+            line-height: 1.7;
+        }
+
+        .card-list {
+            list-style: none;
+            margin-top: var(--spacing-sm);
+        }
+
+        .card-list li {
+            padding-left: var(--spacing-md);
+            position: relative;
+            margin-bottom: var(--spacing-xs);
+            color: var(--gray-600);
+        }
+
+        .card-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 2px;
+        }
+
+        /* Scenario Cards */
+        .scenario-card {
+            position: relative;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: var(--spacing-lg);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-200);
+            transition: all var(--transition-base);
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scenario-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .scenario-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .scenario-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .scenario-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .scenario-card:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .scenario-card:nth-child(6) {
+            animation-delay: 0.6s;
+        }
+
+        .scenario-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .scenario-header {
+            padding: var(--spacing-md) var(--spacing-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scenario-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.1;
+            background: linear-gradient(135deg, transparent 0%, white 100%);
+        }
+
+        .scenario-header.feature {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .scenario-header.fix {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        .scenario-header.critical {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        .scenario-header.enhancement {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        }
+
+        .scenario-header.quality {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        }
+
+        .scenario-title {
+            color: white;
+            font-size: 1.125rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .scenario-badge {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 0.375rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            font-family: var(--font-mono);
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .scenario-body {
+            padding: var(--spacing-lg);
+        }
+
+        .scenario-section {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .scenario-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .scenario-section-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--gray-700);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .scenario-text {
+            color: var(--gray-600);
+            line-height: 1.7;
+        }
+
+        .scenario-list {
+            list-style: none;
+            margin-top: var(--spacing-xs);
+        }
+
+        .scenario-list li {
+            padding-left: var(--spacing-md);
+            position: relative;
+            margin-bottom: var(--spacing-xs);
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+
+        .scenario-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            position: relative;
+            background: var(--gray-900);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: var(--spacing-sm);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .code-block pre {
+            padding: var(--spacing-md);
+            overflow-x: auto;
+            margin: 0;
+        }
+
+        .code-block code {
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+        }
+
+        .code-error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+
+        .code-error code {
+            color: #991b1b;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--secondary);
+            color: var(--gray-400);
+            padding: var(--spacing-xl) 0;
+            margin-top: var(--spacing-xl);
+        }
+
+        .footer-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-lg);
+            text-align: center;
+        }
+
+        .footer-title {
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .footer-text {
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .footer-meta {
+            margin-top: var(--spacing-md);
+            padding-top: var(--spacing-md);
+            border-top: 1px solid var(--gray-700);
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        /* Utility Classes */
+        code {
+            font-family: var(--font-mono);
+            background: var(--gray-100);
+            padding: 0.125rem 0.375rem;
+            border-radius: 4px;
+            font-size: 0.875em;
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        strong {
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .nav {
+                display: none;
+            }
+
+            .container {
+                padding: var(--spacing-lg) var(--spacing-md);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="header-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">CV</div>
+                <span>CV Maker Documentation</span>
+            </a>
+            <nav class="nav">
+                <a href="#overview" class="nav-link">Overview</a>
+                <a href="#scenarios" class="nav-link">Scenarios</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Hero -->
+        <div class="hero">
+            <h1 class="hero-title">Project Documentation</h1>
+            <p class="hero-subtitle">A living log of development, decisions, and technical resolutions</p>
+        </div>
+
+        <!-- Mandate -->
+        <div class="mandate">
+            <h2 class="mandate-title">
+                <span>⚠️</span>
+                Documentation Mandate
+            </h2>
+            <p class="mandate-text">
+                Every future change, no matter how small, MUST be logged in this file following the "Scenario-Based
+                Logging" format below. This file serves as the single source of truth for the project's history and
+                technical evolution.
+            </p>
+        </div>
+
+        <!-- Project History -->
+        <section class="section" id="overview">
+            <div class="section-header">
+                <div class="section-number">1</div>
+                <h2 class="section-title">Project History</h2>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Initial State</h3>
+                <p class="card-text">
+                    The project began as a functional skeleton of a CV Maker application. Key features included:
+                </p>
+                <ul class="card-list">
+                    <li>Basic React structure with Vite</li>
+                    <li>JSON Import/Export functionality for CV data</li>
+                    <li>A basic editor and preview panel</li>
+                    <li>A non-functional "Export PDF" button using <code>react-to-print</code></li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Enhancement Phase Goals</h3>
+                <p class="card-text">
+                    The primary objective was to transform the skeleton into a feature-rich application by:
+                </p>
+                <ul class="card-list">
+                    <li>Implementing a <strong>Design Control Panel</strong> for switching templates and fonts</li>
+                    <li>Creating <strong>3 Professional Templates</strong> (Modern, Classic, Creative)</li>
+                    <li>Fixing the <strong>PDF Export</strong> functionality to ensure direct downloads</li>
+                    <li>Polishing the UI for a professional aesthetic</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Scenario Logs -->
+        <section class="section" id="scenarios">
+            <div class="section-header">
+                <div class="section-number">2</div>
+                <h2 class="section-title">Scenario-Based Logging</h2>
+            </div>
+
+            <div class="timeline">
+                <!-- Scenario 1 -->
+                <div class="scenario-card">
+                    <div class="scenario-header feature">
+                        <h3 class="scenario-title">Feature Implementation: Design Panel & Templates</h3>
+                        <span class="scenario-badge">2025-11-30</span>
+                    </div>
+                    <div class="scenario-body">
+                        <div class="scenario-section">
+                            <h4 class="scenario-section-title">Problem Statement / Objective</h4>
+                            <p class="scenario-text">
+                                Users needed the ability to customize the look of their CVs by switching between
+                                different layouts and fonts, which was not possible in the initial skeleton.
+                            </p>
+                        </div>
+                        <div class="scenario-section">
+                            <h4 class="scenario-section-title">Solution Steps</h4>
+                            <ul class="scenario-list">
+                                <li>Updated <code>CVContext</code> to include a <code>settings</code> state (template,
+                                    font, color)</li>
+                                <li>Created a <code>DesignPanel</code> component with selectors for Templates, Google
+                                    Fonts, and Colors</li>
+                                <li>Implemented three template components: <code>ModernTemplate</code>,
+                                    <code>ClassicTemplate</code>, and <code>CreativeTemplate</code>
+                                </li>
+                                <li>Updated <code>PreviewPanel</code> to dynamically render the selected template</li>
+                            </ul>
+                        </div>
+                        <div class="scenario-section">
+                            <h4 class="scenario-section-title">Final Code (Context Update)</h4>
+                            <div class="code-block">
+                                <pre><code>const [settings, setSettings] = useState(() => {
+    const saved = localStorage.getItem('cvSettings');
+    return saved ? JSON.parse(saved) : initialSettings;
+});
+
+const updateSettings = (field, value) => {
+    setSettings(prev => ({ ...prev, [field]: value }));
+};</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scenario 2 -->
+                <div class="scenario-card">
+                    <div class="scenario-header fix">
+                        <h3 class="scenario-title">UX Fix: PDF Export (Print Dialog)</h3>
+                        <span class="scenario-badge">2025-11-30</span>
+                    </div>
+                    <div class="scenario-body">
+                        <div class="scenario-section">
+                            <h4 class="scenario-section-title">Problem Statement</h4>
+                            <p class="scenario-text">
+                                The "Export PDF" button used <code>react-to-print</code>, which only opened the
+                                browser's print dialog. The user expected a direct file download and reported the dialog
+                                as "not visible" or "hanging".
+                            </p>
+                        </div>
+                        <div class="scenario-section">
+                            <h4 class="scenario-section-title">Obstruction / Original Code</h4>
+                            <div class="code-block code-error">
+                                <pre><code>const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    documentTitle: 'My CV',
+});</code></pre>
+                            </div>
+                        </div>
+                        <div class="scenario-section">
+                            <h4 class="scenario-section-title">Solution Steps</h4>
+                            <ul class="scenario-list">
+                                <li>Removed <code>react-to-print</code></li>
+                                <li>Switched to <code>html2pdf.js</code> (and later direct <code>html2canvas</code> +
+                                    <code>jspdf</code>) to force a file download
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scenario 3 -->
+                <div class="scenario-card">
+                    <div class="scenario-header critical">
+                        <h3 class="scenario-title">Critical Bug Fix: PDF Export Hang & Error</h3>
+                        <span class="scenario-badge">2025-11-30</span>
+                    </div>
+                    <div class="scenario-body">
+                        <div class="scenario-section">
+                            <h4 class="scenario-section-title">Problem Statement</h4>
+                            <p class="scenario-text">
+                                1. The UI would freeze (hang) during PDF generation.<br>
+                                2. Generation failed with error:
+                                <code>Attempting to parse an unsupported color function "oklch"</code>.
+                            </p>
+                        </div>
+                        <div class="scenario-section">
+                            <h4 class="scenario-section-title">Obstruction / Root Cause</h4>
+                            <ul class="scenario-list">
+                                <li><strong>Hang:</strong> Synchronous heavy calculation on the main thread</li>
+                                <li><strong>Error:</strong> Tailwind CSS v4 defaults to <code>oklch</code> color space,
+                                    which <code>html2canvas</code> does not support</li>
+                            </ul>
+                        </div>
+                        <div class="scenario-section">
+                            <h4 class="scenario-section-title">Solution Steps</h4>
+                            <ul class="scenario-list">
+                                <li>Implemented <code>isGenerating</code> state to show a loading spinner and disable
+                                    the button</li>
+                                <li>Replaced <code>html2pdf.js</code> wrapper with direct <code>html2canvas</code> +
+                                    <code>jspdf</code> implementation for better control
+                                </li>
+                                <li><strong>Crucial Fix:</strong> Overrode Tailwind's default colors in
+                                    <code>index.css</code> with standard HEX values
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="scenario-section">
+                            <h4 class="scenario-section-title">Corrected Code (Color Override)</h4>
+                            <div class="code-block">
+                                <pre><code>@theme {
+  /* Override colors with HEX for html2canvas compatibility */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  /* ... other colors ... */
+  --color-blue-600: #2563eb;
+}</code></pre>
+                            </div>
+                        </div>
+                        <div class="scenario-section">
+                            <h4 class="scenario-section-title">Corrected Code (Export Logic)</h4>
+                            <div class="code-block">
+                                <pre><code>const handlePrint = async () => {
+    setIsGenerating(true);
+    try {
+        const html2canvas = (await import('html2canvas')).default;
+        const { jsPDF } = await import('jspdf');
+        
+        const canvas = await html2canvas(element, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+        
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, finalHeight);
+        pdf.save('my-cv.pdf');
+    } catch (err) {
+        alert(`Failed to generate PDF: ${err.message}`);
+    } finally {
+        setIsGenerating(false);
+    }
+};</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scenario 4 -->
+                <div class="scenario-card">
+                    <div class="scenario-header enhancement">
+                        <h3 class="scenario-title">Feature Enhancement: Skills Section Layout</h3>
+                        <span class="scenario-badge">2025-12-01</span>
+                    </div>
+                    <div class="scenario-body">
+                        <div class="scenario-section">
+                            <h4 class="scenario-section-title">Problem Statement</h4>
+                            <p class="scenario-text">
+                                The "Skills" section was displaying items vertically, taking up too much space. It also
+                                included unnecessary fields (Subtitle, Date, Description) relevant for jobs but not for
+                                simple skills.
+                            </p>
+                        </div>
+                        <div class="scenario-section">
+                            <h4 class="scenario-section-title">Solution Steps</h4>
+                            <ul class="scenario-list">
+                                <li>Modified <code>SectionEditor</code> to detect the "Skills" section</li>
+                                <li>Hidden unnecessary input fields for Skills</li>
+                                <li>Added a toggle switch to enable/disable underlining of skills</li>
+                                <li>Updated <code>ModernTemplate</code> to render skills horizontally with wrapping</li>
+                            </ul>
+                        </div>
+                        <div class="scenario-section">
+                            <h4 class="scenario-section-title">Code Snippet (Template Logic)</h4>
+                            <div class="code-block">
+                                <pre><code>{section.title.toLowerCase() === 'skills' ? (
+    <span className={`... ${section.isUnderlined !== false ? 'border-b-2' : ''}`}>
+        {item.title}
+    </span>
+) : ( ... )}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scenario 5 -->
+                <div class="scenario-card">
+                    <div class="scenario-header fix">
+                        <h3 class="scenario-title">Bug Fix: Skills Layout in Classic Template</h3>
+                        <span class="scenario-badge">2025-12-01 01:15</span>
+                    </div>
+                    <div class="scenario-body">
+                        <div class="scenario-section">
+                            <h4 class="scenario-section-title">Problem Statement</h4>
+                            <p class="scenario-text">
+                                The horizontal layout and underlining features for the "Skills" section were initially
+                                implemented only for the Modern Template. The Classic Template still displayed skills
+                                vertically with extra fields.
+                            </p>
+                        </div>
+                        <div class="scenario-section">
+                            <h4 class="scenario-section-title">Solution Steps</h4>
+                            <ul class="scenario-list">
+                                <li>Applied the same logic from <code>ModernTemplate</code> to
+                                    <code>ClassicTemplate</code>
+                                </li>
+                                <li>Used <code>flex-wrap</code> and <code>justify-center</code> to align skills
+                                    horizontally in the center, matching the Classic theme's centered aesthetic</li>
+                                <li>Implemented the underline toggle check</li>
+                                <li><strong>Note:</strong> The <code>CreativeTemplate</code> was intentionally left
+                                    unchanged as the vertical layout suits its design better</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scenario 6 -->
+                <div class="scenario-card">
+                    <div class="scenario-header quality">
+                        <h3 class="scenario-title">Quality Fix: PDF Export & Spacing</h3>
+                        <span class="scenario-badge">2025-12-01 01:30</span>
+                    </div>
+                    <div class="scenario-body">
+                        <div class="scenario-section">
+                            <h4 class="scenario-section-title">Problem Statement</h4>
+                            <p class="scenario-text">
+                                1. PDF export quality was low (blurry text).<br>
+                                2. Underlines in "Skills" and Section Headers were too close to the text, sometimes
+                                merging with it.
+                            </p>
+                        </div>
+                        <div class="scenario-section">
+                            <h4 class="scenario-section-title">Solution Steps</h4>
+                            <ul class="scenario-list">
+                                <li><strong>PDF Quality:</strong> Increased <code>html2canvas</code> scale from 2 to 4
+                                </li>
+                                <li><strong>Spacing:</strong> Increased <code>padding-bottom</code> for Skills items and
+                                    Section Headers in both Modern and Classic templates</li>
+                                <li>Added <code>leading-relaxed</code> to skills to improve line height</li>
+                            </ul>
+                        </div>
+                        <div class="scenario-section">
+                            <h4 class="scenario-section-title">Code Snippet (App.jsx)</h4>
+                            <div class="code-block">
+                                <pre><code>const canvas = await html2canvas(element, {
+    scale: 4, // Increased from 2 for high quality
+    useCORS: true,
+    logging: false,
+    backgroundColor: '#ffffff'
+});</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h3 class="footer-title">CV Maker Project</h3>
+            <p class="footer-text">
+                Professional CV creation tool with modern templates and export capabilities
+            </p>
+            <div class="footer-meta">
+                Last Updated: <span id="lastUpdated">2025-12-01 01:30</span> • Version 1.0.0
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Header scroll effect
+        const header = document.getElementById('header');
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+
+            if (currentScroll > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+
+            lastScroll = currentScroll;
+        });
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
